@@ -41,3 +41,16 @@ jobs:
       # This proves the runner has an authenticated Azure session
       - name: Show Azure Account
         run: az account show
+
+      # Step 4: Setup Terraform CLI
+      # Installs the specified Terraform version on the runner
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.16.4   # Correct version format (no "v" prefix)
+
+      # Step 5: Initialize Terraform
+      # Runs 'terraform init' in the terraform directory to set up providers and modules
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init

@@ -3,7 +3,7 @@ terraform/.terraform/
 terraform/terraform.tfstate
 terraform/terraform.tfstate.*
 terraform/crash.log
+terraform/tfplan
 
-# Terraform variable files
-terraform/*.tfvars
-terraform/*.tfvars.json
+# Other files
+Daigrams.txt
