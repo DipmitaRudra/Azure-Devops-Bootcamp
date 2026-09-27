@@ -8,12 +8,23 @@ output "az_pub_sub_id_out" {
   value       = azurerm_subnet.pub_subnet_az_bootcamp[0].id
 }
 
-output "az_public_ip_out" {
+output "az_public_ip_id_out" {
   description = "This represents the Public IP ID for AGW."
   value       = azurerm_public_ip.pub_ip_az_bootcamp.id
 
 }
 
+output "az_public_ip_fqdn_out" {
+  description = "This represents the Public IP FQDN for AGW."
+  value       = azurerm_public_ip.pub_ip_az_bootcamp.fqdn
+
+}
+
+output "az_public_ip_out" {
+  description = "This represents the Public IP Address for AGW."
+  value       = azurerm_public_ip.pub_ip_az_bootcamp.ip_address
+
+}
 output "az_priv_sub_id_ep_out" {
   description = "This represents the Private Subnet ID for Web App Private End Point ."
   value       = azurerm_subnet.priv_subnet_az_bootcamp[1].id

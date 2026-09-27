@@ -43,12 +43,16 @@ module "agw" {
   project_name             = var.project_name
   resource_group_name      = module.resource-group.az_rg_name_out
   resource_group_location  = module.resource-group.az_rg_location_out
-  public_ip_id             = module.vnet.az_public_ip_out
+  public_ip_id             = module.vnet.az_public_ip_id_out
   agw_subnet_id            = module.vnet.az_pub_sub_id_out
   web_app_backend_priv_ip  = module.web_app.az_webapp_private_endpoint_ip_out
   web_app_backend_hostname = module.web_app.az_webapp_hostname_out
 }
 
+output "az_public_ip_show" {
+  value = "http://${module.vnet.az_public_ip_out}"
+}
 
-
-
+output "az_public_ip_fqdn_show" {
+  value = "http://${module.vnet.az_public_ip_fqdn_out}"
+}

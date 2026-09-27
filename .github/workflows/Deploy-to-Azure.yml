@@ -67,5 +67,11 @@ jobs:
         working-directory: ./terraform
         run: terraform plan -var-file=${{ env.TFVARS_FILE }} -var="container_image_tag=${{ env.IMAGE_TAG }}" -out=tfplan -input=false
 
+      # Step 8: Terraform Apply
+      # Executes the saved plan file (tfplan) to provision resources
+      - name: Terraform Apply
+        working-directory: ./terraform
+        run: terraform apply tfplan
+
 
 
