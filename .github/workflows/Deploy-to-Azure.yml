@@ -27,6 +27,11 @@ jobs:
       # Step 1: Checkout the repository code
       - name: Checkout Repository
         uses: actions/checkout@v7
+
+      - name: Debug OIDC Environment
+        run: |
+            echo "ACTIONS_ID_TOKEN_REQUEST_URL is set: ${{ env.ACTIONS_ID_TOKEN_REQUEST_URL != '' }}"
+            echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN is set: ${{ env.ACTIONS_ID_TOKEN_REQUEST_TOKEN != '' }}"
         
       # Step 2: Authenticate to Azure using GitHub OIDC
       # This uses federated identity instead of storing secrets in the workflow
