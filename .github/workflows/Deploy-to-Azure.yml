@@ -1,0 +1,43 @@
+# GitHub Actions workflow for deploying to Azure
+name: Deploy to Azure
+
+# Trigger workflow when code is pushed to the dev branch
+on:
+  push:
+    branches: [dev]
+
+# Environment variables used throughout the workflow
+env:
+  AZURE_ENVIRONMENT: dev                   # Deployment environment (e.g., dev, test, prod)
+  ACR_REPOSITORY: azuredevopsbootcampapp   # Name of the ACR repository where the app image is stored
+  TFVARS_FILE: terraform/dev.tfvars        # Path to the Terraform variable file for environment-specific values
+  IMAGE_TAG: ${{ github.sha }}             # Docker image tag, set to the commit SHA for traceability and rollback
+
+jobs:
+  Deploy:
+    # Run on the latest Ubuntu runner
+    runs-on: ubuntu-latest
+
+    # Permissions required for GitHub OIDC authentication with Azure
+    permissions:
+      id-token: write   # Needed for federated identity login (OIDC)
+      contents: read    # Allows reading repository contents
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        
+      # Step 2: Authenticate to Azure using GitHub OIDC
+      # This uses federated identity instead of storing secrets in the workflow
+      - name: Azure Login
+        uses: azure/login@v3
+        with: 
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}               # OIDC app registration client ID
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}               # Azure AD tenant ID
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}   # Target Azure subscription
+      
+      # Step 3: Verify Azure CLI session
+      # This proves the runner has an authenticated Azure session
+      - name: Show Azure Account
+        run: az account show
