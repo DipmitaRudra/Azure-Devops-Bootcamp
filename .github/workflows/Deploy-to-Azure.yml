@@ -10,7 +10,7 @@ on:
 env:
   AZURE_ENVIRONMENT: dev                   # Deployment environment (e.g., dev, test, prod)
   ACR_REPOSITORY: azuredevopsbootcampapp   # Name of the ACR repository where the app image is stored
-  TFVARS_FILE: terraform/dev.tfvars        # Path to the Terraform variable file for environment-specific values
+  TFVARS_FILE: dev.tfvars                  # Path to the Terraform variable file for environment-specific values
   IMAGE_TAG: ${{ github.sha }}             # Docker image tag, set to the commit SHA for traceability and rollback
 
 jobs:
