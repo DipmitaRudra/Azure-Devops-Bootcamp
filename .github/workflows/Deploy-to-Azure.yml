@@ -37,7 +37,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}               # Azure AD tenant ID
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}   # Target Azure subscription
       
-      # Step 3: Verify Azure CLI session
+      # Step 3: Verify Azure CLI session after OIDC login
       # This proves the runner has an authenticated Azure session
       - name: Show Azure Account
         run: az account show
