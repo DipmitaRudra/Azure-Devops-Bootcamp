@@ -61,3 +61,11 @@ jobs:
         working-directory: ./terraform
         run: terraform validate
 
+      # Step 7: Terraform Plan
+      # Creates and saves an execution plan using dev.tfvars, overrides the image tag, and disables interactive prompts
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: terraform plan -var-file=${{ env.TFVARS_FILE }} -var="container_image_tag=${{ env.IMAGE_TAG }}" -out=tfplan -input=false
+
+
+
