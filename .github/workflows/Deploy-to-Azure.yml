@@ -54,3 +54,10 @@ jobs:
       - name: Terraform Init
         working-directory: ./terraform
         run: terraform init
+        
+      # Step 6: Validate Terraform configuration
+      # Ensures the Terraform files are syntactically valid and internally consistent
+      - name: Terraform Validate
+        working-directory: ./terraform
+        run: terraform validate
+
