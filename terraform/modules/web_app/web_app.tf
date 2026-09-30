@@ -34,7 +34,7 @@ resource "azurerm_linux_web_app" "linux_web_app_az_bootcamp" {
 
     application_stack {
       docker_image_name   = "${var.webapp_docker_image_name}:${var.webapp_docker_image_tag}"
-      docker_registry_url = var.web_app_container_login_server
+      docker_registry_url = "https://${var.web_app_container_login_server}"
 
     }
     container_registry_use_managed_identity = var.acr_use_managed_identity

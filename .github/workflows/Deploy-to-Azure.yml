@@ -7,11 +7,14 @@ on:
     branches: [dev]
 
 # Environment variables used throughout the workflow
+# Environment variables for Azure deployment, ACR authentication, and Docker image tagging
 env:
   AZURE_ENVIRONMENT: dev                   # Deployment environment (e.g., dev, test, prod)
+  ACR_NAME: acrazuredevopsbootcamp         # Actual Azure Container Registry resource name
   ACR_REPOSITORY: azuredevopsbootcampapp   # Name of the ACR repository where the app image is stored
   TFVARS_FILE: dev.tfvars                  # Path to the Terraform variable file for environment-specific values
   IMAGE_TAG: ${{ github.sha }}             # Docker image tag, set to the commit SHA for traceability and rollback
+
 
 jobs:
   Deploy:
@@ -66,12 +69,41 @@ jobs:
       - name: Terraform Plan
         working-directory: ./terraform
         run: terraform plan -var-file=${{ env.TFVARS_FILE }} -var="container_image_tag=${{ env.IMAGE_TAG }}" -out=tfplan -input=false
-
+        
       # Step 8: Terraform Apply
       # Executes the saved plan file (tfplan) to provision resources
       - name: Terraform Apply
         working-directory: ./terraform
         run: terraform apply tfplan
+
+      # Step 9: Login to Azure Container Registry
+      # Authenticates Docker to your ACR using Azure CLI
+      - name: Login to Azure Container Registry
+        run: az acr login --name ${{ env.ACR_NAME }}
+
+      # Step 10: Build Docker image with SHA tag
+      # Builds the application image from Dockerfile in ./application and tags it with the commit SHA
+      - name: Build Docker Image
+        run: docker build -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.ACR_REPOSITORY }}:${{ env.IMAGE_TAG }} ./application
+
+      # Step 11: Push Docker image to ACR
+      # Pushes the SHA-tagged image into your Azure Container Registry
+      - name: Push Docker Image
+        run: docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.ACR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      # Step 12: Verify image in ACR
+      # Lists tags in the ACR repository to confirm the SHA-tagged image exists
+      - name: Verify Docker Image in ACR
+        run: az acr repository show-tags --name ${{ env.ACR_NAME }} --repository ${{ env.ACR_REPOSITORY }} --output table
+
+      # Step 13: Restart Azure Web App
+      # Forces the Web App container to restart after the new image has been pushed to ACR
+      - name: Restart Azure Web App
+        run: |
+          az webapp restart \
+            --name linux-web-app-azuredevopsbootcamp \
+            --resource-group rg-azuredevopsbootcamp
+
 
 
 

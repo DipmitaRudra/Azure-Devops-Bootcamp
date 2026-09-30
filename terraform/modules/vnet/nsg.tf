@@ -17,6 +17,19 @@ resource "azurerm_network_security_group" "nsg_agw_az_bootcamp" {
     destination_address_prefix = "*"
   }
 
+  # Allow Azure GatewayManager infrastructure traffic required for Application Gateway v2
+  security_rule {
+    name                       = "allow-agw-${var.project_name}"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    source_address_prefix      = "GatewayManager"
+    destination_address_prefix = "*"
+    destination_port_range     = "65200-65535"
+  }
+
 }
 
 #Create association between Inbound AGW-NSG and pub-sub-1
@@ -54,3 +67,4 @@ resource "azurerm_subnet_network_security_group_association" "app_az_bootcamp" {
   network_security_group_id = azurerm_network_security_group.nsg_app_az_bootcamp.id
 
 }
+
