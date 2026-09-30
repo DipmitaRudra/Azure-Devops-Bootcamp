@@ -3,6 +3,7 @@ name: Deploy to Azure
 
 # Trigger workflow when code is pushed to the dev branch
 on:
+  workflow_dispatch:
   push:
     branches: [dev]
 
