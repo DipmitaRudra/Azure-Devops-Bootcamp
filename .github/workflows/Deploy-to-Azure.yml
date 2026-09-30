@@ -76,7 +76,7 @@ jobs:
         working-directory: ./terraform
         run: terraform apply tfplan
 
-      # Refresh Azure OIDC authentication before accessing ACR
+      # Step 9: Refresh Azure OIDC authentication before accessing ACR
       - name: Refresh Azure Login
         uses: azure/login@v3
         with:
@@ -84,27 +84,27 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Step 9: Login to Azure Container Registry
+      # Step 10: Login to Azure Container Registry
       # Authenticates Docker to your ACR using Azure CLI
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ env.ACR_NAME }}
 
-      # Step 10: Build Docker image with SHA tag
+      # Step 11: Build Docker image with SHA tag
       # Builds the application image from Dockerfile in ./application and tags it with the commit SHA
       - name: Build Docker Image
         run: docker build -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.ACR_REPOSITORY }}:${{ env.IMAGE_TAG }} ./application
 
-      # Step 11: Push Docker image to ACR
+      # Step 12: Push Docker image to ACR
       # Pushes the SHA-tagged image into your Azure Container Registry
       - name: Push Docker Image
         run: docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.ACR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-      # Step 12: Verify image in ACR
+      # Step 13: Verify image in ACR
       # Lists tags in the ACR repository to confirm the SHA-tagged image exists
       - name: Verify Docker Image in ACR
         run: az acr repository show-tags --name ${{ env.ACR_NAME }} --repository ${{ env.ACR_REPOSITORY }} --output table
 
-      # Step 13: Restart Azure Web App
+      # Step 14: Restart Azure Web App
       # Forces the Web App container to restart after the new image has been pushed to ACR
       - name: Restart Azure Web App
         run: |
