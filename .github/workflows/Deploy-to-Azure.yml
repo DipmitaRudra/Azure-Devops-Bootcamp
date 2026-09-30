@@ -1,11 +1,12 @@
 # GitHub Actions workflow for deploying to Azure
 name: Deploy to Azure
 
-# Trigger workflow when code is pushed to the dev branch
+# Trigger workflow manually or when code is pushed to the dev branch
 on:
-  workflow_dispatch:
+  workflow_dispatch:        # Allows manual trigger from GitHub Actions UI
   push:
-    branches: [dev]
+    branches: [dev]         # Automatically runs when commits are pushed to the dev branch
+
 
 # Environment variables used throughout the workflow
 # Environment variables for Azure deployment, ACR authentication, and Docker image tagging
