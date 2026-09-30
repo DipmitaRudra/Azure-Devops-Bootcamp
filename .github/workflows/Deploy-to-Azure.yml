@@ -76,6 +76,14 @@ jobs:
         working-directory: ./terraform
         run: terraform apply tfplan
 
+      # Refresh Azure OIDC authentication before accessing ACR
+      - name: Refresh Azure Login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       # Step 9: Login to Azure Container Registry
       # Authenticates Docker to your ACR using Azure CLI
       - name: Login to Azure Container Registry
