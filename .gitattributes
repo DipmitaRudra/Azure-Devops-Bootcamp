@@ -1,0 +1,8 @@
+# GitHub Linguist - detect project source files
+*.tf linguist-detectable=true
+*.js linguist-detectable=true
+*.css linguist-detectable=true
+*.html linguist-detectable=true
+*.yml linguist-detectable=true
+*.yaml linguist-detectable=true
+Dockerfile linguist-detectable=true
